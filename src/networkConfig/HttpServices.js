@@ -4,7 +4,7 @@ import {StatusCode} from './Endpoints';
 import NetInfo from '@react-native-community/netinfo';
 import Strings from '../utils/Strings';
 import Colors from '../theme/Colors';
-import {showErrorToast} from '../components/FlashMessage';
+import {showErrorToast} from '../utils/FlashMessage';
 
 export default class HTTPService {
   static timeOut = promise => {
@@ -55,20 +55,8 @@ export default class HTTPService {
       data: params,
     });
 
-  static getSimpleHeaders = async () => ({
-    'Content-Type': 'application/json',
-  });
-
   static getHeadersWithToken = async () => ({
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${await this.getAccessToken()}`,
-    tenant: 'physician',
-  });
-
-  static getHeadersWithTokenAndPdf = async () => ({
-    'Content-Type': 'application/pdf',
-    Authorization: `Bearer ${await this.getAccessToken()}`,
-    tenant: 'physician',
   });
 
   static getAccessToken = async () => {
@@ -140,30 +128,27 @@ export default class HTTPService {
 
   static checkAndValidateResponse = (response, endpoint, params) => {
     const result = response.data;
-    let reqResponse = {endpoint, result, reqParams: params};
+    let reqResponse = {endpoint, result, reqParams: params, response};
     //FIXME: we need this log for development purpose
     console.log(
       '%c Axios Response',
       `background: ${Colors.modal_bg_color}; color: ${Colors.white}`,
       reqResponse,
     );
-    if (result.status_code == StatusCode.SERVERERRORCODE) {
+
+    if (response.status == StatusCode.SERVERERRORCODE) {
       showErrorToast(
         result?.message ? result.message : Strings.serverErrorMessage,
       );
       return false;
     }
 
-    if (result.status_code == StatusCode.NOTFOUNDCODE) {
+    if (response.status == StatusCode.NOTFOUNDCODE) {
       showErrorToast(result?.message);
       return false;
     }
 
-    if (
-      result.status_code == StatusCode.SUCCESS ||
-      result.status_code == StatusCode.SUCCESSCODE204 ||
-      result.status_code == StatusCode.SUCCESSCODE2
-    ) {
+    if (response.status == StatusCode.SUCCESS) {
       return result;
     }
 
