@@ -2,7 +2,7 @@ const Colors = {
   white: '#FFFFFF',
   black: '#000000',
   red: '#FF3C31',
-  modal_bg_color: '#26323870',
+  modal_bg_color: 'rgba(0,0,0,0.8)',
   transparent: 'transparent',
   primaryBlack: '#11182E',
   background: '#F8F8F9',

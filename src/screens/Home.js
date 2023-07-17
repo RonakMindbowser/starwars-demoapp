@@ -3,12 +3,16 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAllPeopleList} from '../redux/slices/peopleListSlice';
 import {isEmptyOrNull} from '../utils/Validations';
-import {StarWarsCardComponent} from '../components';
+import {StarWarsCardComponent, StarWarsZoomComponent} from '../components';
 
 const Home = () => {
   const [starWarsCharList, setStarWarsCharList] = useState([]);
   const dispatch = useDispatch();
   const peopleListState = useSelector(state => state.peopleList);
+  console.log('peopleListState-->', peopleListState);
+
+  const [isZoomModelVisible, setIsZoomModelVisible] = useState(false);
+  const [imageZoomData, setImageZoomData] = useState('');
 
   useEffect(() => {
     dispatch(getAllPeopleList());
@@ -29,8 +33,27 @@ const Home = () => {
       }
   }, [peopleListState?.peopleList]);
 
+  const handleOnEndReached = () => {
+    if (!isEmptyOrNull(peopleListState?.nextLink)) {
+      const params = {
+        nextUrl: peopleListState?.nextLink,
+      };
+      dispatch(getAllPeopleList(params));
+    }
+  };
+
   const renderCharListItem = ({item, index}) => {
-    return <StarWarsCardComponent />;
+    return (
+      <StarWarsCardComponent
+        {...item}
+        onLongPress={url => onLongPress(url, item)}
+      />
+    );
+  };
+
+  const onLongPress = (url, item) => {
+    setImageZoomData({...item, url});
+    setIsZoomModelVisible(true);
   };
 
   return (
@@ -42,8 +65,15 @@ const Home = () => {
         showsVerticalScrollIndicator={false}
         renderItem={renderCharListItem}
         contentContainerStyle={styles.contentContainerStyle}
+        onEndReached={handleOnEndReached}
+        onEndReachedThreshold={0.9}
       />
       <SafeAreaView />
+      <StarWarsZoomComponent
+        isVisible={isZoomModelVisible}
+        onClose={() => setIsZoomModelVisible(false)}
+        imageData={imageZoomData}
+      />
     </View>
   );
 };

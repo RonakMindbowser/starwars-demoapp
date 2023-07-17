@@ -1,0 +1,90 @@
+import {Image, ImageBackground, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import Modal from 'react-native-modal';
+import Colors from '../theme/Colors';
+import ZoomableImageComponent from './ZoomableImageComponent';
+import {screenHeight, screenWidth} from '../utils/Metrics';
+import imageConstants from '../res';
+
+const StarWarsZoomComponent = ({isVisible, onClose, imageData}) => {
+  return (
+    <Modal
+      transparent={true}
+      isVisible={isVisible}
+      useNativeDriverForBackdrop
+      backdropOpacity={0.5}
+      onBackdropPress={onClose}
+      style={styles.modalStyle}
+      animationIn="zoomInDown"
+      animationOut="zoomOutUp"
+      animationInTiming={600}
+      animationOutTiming={600}
+      backdropTransitionInTiming={600}
+      backdropTransitionOutTiming={600}
+      onModalHide={onClose}>
+      <View style={styles.mainContainer}>
+        <View style={styles.subContainer}>
+          <View style={styles.headerWrap}>
+            <ImageBackground
+              source={imageConstants.cardPlaceHolderImage}
+              imageStyle={styles.smallImage}
+              style={styles.smallImage}>
+              <Image
+                style={styles.smallImage}
+                source={{
+                  uri: imageData?.url,
+                }}
+              />
+            </ImageBackground>
+            <Text style={styles.title}>{imageData?.name}</Text>
+          </View>
+          <ImageBackground
+            source={imageConstants.cardPlaceHolderImage}
+            style={styles.imageView}
+            imageStyle={styles.imageView}>
+            <Image source={{uri: imageData?.url}} style={styles.imageView} />
+          </ImageBackground>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+export default StarWarsZoomComponent;
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: Colors.modal_bg_color,
+    justifyContent: 'center',
+  },
+  modalStyle: {margin: 0, flex: 1},
+  subContainer: {
+    backgroundColor: Colors.white,
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  imageView: {
+    height: 400,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  smallImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 60,
+  },
+  headerWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  title: {
+    fontSize: 16,
+    color: Colors.black,
+    fontWeight: '700',
+    marginLeft: 10,
+  },
+});

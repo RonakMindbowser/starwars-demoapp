@@ -1,7 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from './NavigationService';
 import {createStackNavigator} from '@react-navigation/stack';
-import {routeNames} from '../utils/routeNames';
+import {routeNames} from '../utils/RouteNames';
 import {Home} from '../screens';
 
 const options = {
