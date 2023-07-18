@@ -10,6 +10,7 @@ const Colors = {
   errorColor: '#FE6301',
   infoColor: '#87CEFA',
   blueGrey: '#7393B3',
+  primaryText: '#515A6E',
 };
 
 export default Colors;

@@ -1,12 +1,17 @@
-import {Image, ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import Modal from 'react-native-modal';
 import Colors from '../theme/Colors';
-import ZoomableImageComponent from './ZoomableImageComponent';
-import {screenHeight, screenWidth} from '../utils/Metrics';
 import imageConstants from '../res';
 
-const StarWarsZoomComponent = ({isVisible, onClose, imageData}) => {
+const StarWarsZoomComponent = ({isVisible, onClose, charData}) => {
   return (
     <Modal
       transparent={true}
@@ -25,24 +30,29 @@ const StarWarsZoomComponent = ({isVisible, onClose, imageData}) => {
       <View style={styles.mainContainer}>
         <View style={styles.subContainer}>
           <View style={styles.headerWrap}>
-            <ImageBackground
-              source={imageConstants.cardPlaceHolderImage}
-              imageStyle={styles.smallImage}
-              style={styles.smallImage}>
-              <Image
-                style={styles.smallImage}
-                source={{
-                  uri: imageData?.url,
-                }}
-              />
-            </ImageBackground>
-            <Text style={styles.title}>{imageData?.name}</Text>
+            <View style={styles.leftWrap}>
+              <ImageBackground
+                source={imageConstants.cardPlaceHolderImage}
+                imageStyle={styles.smallImage}
+                style={styles.smallImage}>
+                <Image
+                  style={styles.smallImage}
+                  source={{
+                    uri: charData?.url,
+                  }}
+                />
+              </ImageBackground>
+              <Text style={styles.title}>{charData?.name}</Text>
+            </View>
+            <TouchableOpacity style={styles.rightWrap} onPress={onClose}>
+              <Image source={imageConstants.closeIcon} />
+            </TouchableOpacity>
           </View>
           <ImageBackground
             source={imageConstants.cardPlaceHolderImage}
             style={styles.imageView}
             imageStyle={styles.imageView}>
-            <Image source={{uri: imageData?.url}} style={styles.imageView} />
+            <Image source={{uri: charData?.url}} style={styles.imageView} />
           </ImageBackground>
         </View>
       </View>
@@ -80,11 +90,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 10,
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 16,
     color: Colors.black,
     fontWeight: '700',
     marginLeft: 10,
+  },
+  leftWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rightWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

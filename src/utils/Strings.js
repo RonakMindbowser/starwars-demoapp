@@ -8,5 +8,18 @@ const Strings = {
     'Your access token has expired. Please try to login again.',
   noInternetConnection: 'No Internet Connection',
   pleaseCheckYourInnternet: 'Please check your internet connection',
+  height: 'Height',
+  meters: 'meters',
+  mass: 'Mass',
+  kg: 'kg',
+  creationDate: 'Date of Creation',
+  numberOfFilms: 'Number of Films The Person Appears In',
+  birthYear: 'Birth Year',
+  homeWorldName: 'Home World Name',
+  terrain: 'Terrain',
+  climate: 'Climate',
+  amountOfResidents: 'Amount of Residents',
+  search: 'Search...',
+  noRecordFound: 'No Record Found.',
 };
 export default Strings;

@@ -10,12 +10,13 @@ import React from 'react';
 import imageConstants from '../res';
 import Colors from '../theme/Colors';
 
-const StarWarsCardComponent = ({name, species, onLongPress}) => {
+const StarWarsCardComponent = ({name, species, onLongPress, onPress}) => {
   let randomImage = imageConstants.randomImageUrl;
 
   return (
     <TouchableOpacity
       style={styles.container}
+      onPress={() => onPress(randomImage)}
       onLongPress={() => onLongPress(randomImage)}>
       <ImageBackground
         source={imageConstants.cardPlaceHolderImage}

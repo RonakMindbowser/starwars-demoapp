@@ -7,16 +7,21 @@ export const getAllPeopleList = createAsyncThunk(
   'peopleList/getAll',
   async (payload, {getState, fulfillWithValue, rejectWithValue, dispatch}) => {
     try {
-      dispatch(requestStarted());
+      if (!payload?.isPagination) {
+        dispatch(requestStarted());
+      }
 
       let nextUrl = payload?.nextUrl;
 
-      const BAST_URL = nextUrl ? nextUrl : Endpoints.baseUrl + Endpoints.people;
+      const BAST_URL = nextUrl
+        ? nextUrl
+        : payload?.isSearch
+        ? `${Endpoints.baseUrl}${Endpoints.people}?search=${payload?.value}`
+        : Endpoints.baseUrl + Endpoints.people;
       const response = await HTTPService.getRequest(BAST_URL);
       dispatch(requestCompleted());
 
       if (response?.results) {
-        console.log('success');
         return fulfillWithValue({
           list: response?.results,
           count: response?.count,
@@ -61,7 +66,6 @@ export const peopleListSlice = createSlice({
       state.nextLink = '';
     });
     builder.addCase(getAllPeopleList.fulfilled, (state, action) => {
-      console.log('action', action);
       state.loading = false;
       state.peopleList = action?.payload?.list;
       state.error = null;
