@@ -2,7 +2,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from './NavigationService';
 import {createStackNavigator} from '@react-navigation/stack';
 import {routeNames} from '../utils/RouteNames';
-import {Home} from '../screens';
+import BottomTab from './BottomTab';
+import {Login, Splash} from '../screens';
 
 const options = {
   options: {
@@ -15,9 +16,19 @@ const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen {...options} name={routeNames.home} component={Home} />
+    <NavigationContainer ref={navigationRef}>
+      <Stack.Navigator initialRouteName={routeNames.splash}>
+        <Stack.Screen
+          {...options}
+          name={routeNames.splash}
+          component={Splash}
+        />
+        <Stack.Screen {...options} name={routeNames.login} component={Login} />
+        <Stack.Screen
+          {...options}
+          name={routeNames.bottomTab}
+          component={BottomTab}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

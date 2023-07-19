@@ -29,6 +29,7 @@ import {
   homeWorldReset,
 } from '../redux/slices/homeWorldSlice';
 import Strings from '../utils/Strings';
+import {sign, decode} from 'react-native-pure-jwt';
 
 const Home = () => {
   const [starWarsCharList, setStarWarsCharList] = useState([]);
@@ -48,7 +49,45 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getAllPeopleList());
+
+    // sign(
+    //   {
+    //     iss: 'luisfelipez@live.com',
+    //     exp: new Date().getTime() + 5 * 1000, // expiration date, required, in ms, absolute to 1/1/1970
+    //     additional: 'payload',
+    //   }, // body
+    //   'my-secret', // secret
+    //   {
+    //     alg: 'HS256',
+    //   },
+    // )
+    //   .then(res => {
+    //     console.log('sign res', res);
+    //     checkDecode(res);
+    //     setTimeout(() => {
+    //       checkDecode(res);
+    //     }, 4000);
+    //     setTimeout(() => {
+    //       checkDecode(res);
+    //     }, 5000);
+    //     setTimeout(() => {
+    //       checkDecode(res);
+    //     }, 6000);
+    //   }) // token as the only argument
+    //   .catch(error => console.log('sign error', error)); // possible errors
   }, []);
+
+  // const checkDecode = res => {
+  //   decode(
+  //     res, // the token
+  //     'my-secret', // the secret
+  //     {
+  //       skipValidation: false, // to skip signature and exp verification
+  //     },
+  //   )
+  //     .then(res => console.log('decode res', res)) // token as the only argument
+  //     .catch(error => console.log('decode error', error));
+  // };
 
   useEffect(() => {
     if (

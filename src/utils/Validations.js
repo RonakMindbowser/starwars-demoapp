@@ -18,3 +18,17 @@ export const getFormattedString = value => {
   const str2 = arr.join(' ');
   return str2;
 };
+
+export const isValidEmail = email => {
+  if (email.length > 320) return false;
+  let expression = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+  return expression.test(String(email).toLowerCase());
+};
+
+// validation for password
+export const isValidPassword = password => {
+  var regularExpression =
+    /^(?=.*[A-Z])(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
+  return regularExpression.test(String(password));
+};

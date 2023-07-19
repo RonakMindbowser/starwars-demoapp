@@ -1,10 +1,11 @@
 import axios from 'axios';
 import StorageService from '../utils/AsyncStorage';
-import {StatusCode} from './Endpoints';
+import {StatusCode, appSecretForAuthentication} from './Endpoints';
 import NetInfo from '@react-native-community/netinfo';
 import Strings from '../utils/Strings';
 import Colors from '../theme/Colors';
-import {showErrorToast} from '../utils/FlashMessage';
+import {showErrorToast, showSuccessToast} from '../utils/FlashMessage';
+import {sign, decode} from 'react-native-pure-jwt';
 
 export default class HTTPService {
   static timeOut = promise => {
@@ -78,50 +79,72 @@ export default class HTTPService {
       return false;
     }
 
-    const headers = await this.getHeadersWithToken();
+    const {isSuccess} = await this.checkTokenValidation();
+    console.log('succes--->', isSuccess);
 
-    const axiosRequest = {
-      url: endpoint,
-      headers: headers,
-      ...params,
-    };
-    //FIXME: we need this log for development purpose
-    console.log(
-      '%c Axios Request',
-      `background: ${Colors.black}; color: ${Colors.white}`,
-      axiosRequest,
-    );
+    if (isSuccess) {
+      const headers = await this.getHeadersWithToken();
 
-    try {
-      const response = await this.timeOut(
-        axios({
-          ...axiosRequest,
-          validateStatus: status => {
-            return status < 500;
-          },
-        }),
-      );
-      return this.checkAndValidateResponse(response, endpoint, params);
-    } catch (error) {
-      let reqError = {
-        error,
-        endpoint,
+      const axiosRequest = {
+        url: endpoint,
+        headers: headers,
+        ...params,
       };
       //FIXME: we need this log for development purpose
       console.log(
-        '%c Axios Error',
-        `background: ${Colors.red}; color: ${Colors.white}`,
-        reqError,
+        '%c Axios Request',
+        `background: ${Colors.black}; color: ${Colors.white}`,
+        axiosRequest,
       );
-      if (error) {
-        if (error?.status == StatusCode.TIMEOUT) {
-          showErrorToast(Strings.requestTimeoutMessage);
-          clearTimeout(error.timerId);
-          return false;
-        } else {
-          showErrorToast(Strings.somethingWentWrong);
-          return false;
+
+      try {
+        const response = await this.timeOut(
+          axios({
+            ...axiosRequest,
+            validateStatus: status => {
+              return status < 500;
+            },
+          }),
+        );
+        return this.checkAndValidateResponse(response, endpoint, params);
+      } catch (error) {
+        let reqError = {
+          error,
+          endpoint,
+        };
+        //FIXME: we need this log for development purpose
+        console.log(
+          '%c Axios Error',
+          `background: ${Colors.red}; color: ${Colors.white}`,
+          reqError,
+        );
+        if (error) {
+          if (error?.status == StatusCode.TIMEOUT) {
+            showErrorToast(Strings.requestTimeoutMessage);
+            clearTimeout(error.timerId);
+            return false;
+          } else {
+            showErrorToast(Strings.somethingWentWrong);
+            return false;
+          }
         }
+      }
+    } else {
+      const userData = JSON.parse(
+        await StorageService.getItem(StorageService.Keys.userData),
+      );
+      const response = await this.generateNewAccessToken(userData);
+      console.log('response-->', response);
+      if (response?.isSuccess) {
+        const token = {
+          accessToken: response?.response,
+        };
+        await StorageService.setItem(StorageService.Keys.accessToken, token);
+        showSuccessToast(Strings.tokenRefreshSuccessFully);
+        return HTTPService.buildRequest(endpoint, params, options);
+      } else {
+        showErrorToast(Strings.somethingWentWrong);
+        return false;
       }
     }
   };
@@ -164,5 +187,65 @@ export default class HTTPService {
       : Strings.somethingWentWrong;
     showErrorToast(message);
     return false;
+  };
+
+  static generateNewAccessToken = async params => {
+    try {
+      const response = await sign(
+        {
+          iss: params?.email,
+          exp: new Date().getTime() + 30 * 1000,
+          additional: 'params',
+        },
+        appSecretForAuthentication,
+        {
+          alg: 'HS256',
+        },
+      );
+      if (response) {
+        return {
+          isSuccess: true,
+          response,
+        };
+      }
+    } catch (error) {
+      return {
+        isSuccess: false,
+        response,
+        error,
+      };
+    }
+  };
+
+  static checkTokenValidation = async () => {
+    const token = JSON.parse(
+      await StorageService.getItem(StorageService.Keys.accessToken),
+    );
+    console.log('Stored Token-->', token);
+    try {
+      let response = await decode(
+        token?.accessToken, // the token
+        appSecretForAuthentication, // the secret
+        {
+          skipValidation: false, // to skip signature and exp verification
+        },
+      );
+      console.log('response-123 of decode-', response);
+      if (response) {
+        return {
+          isSuccess: true,
+        };
+      } else {
+        return {
+          isSuccess: false,
+        };
+      }
+    } catch (error) {
+      console.log('Error-->', error);
+      return {
+        isSuccess: false,
+        error: error,
+      };
+    }
   };
 }

@@ -11,3 +11,5 @@ export const StatusCode = {
   SESSIONTIMEOUTCODE: 403,
   CODE405: 405,
 };
+
+export const appSecretForAuthentication = 'XYZSTARWARS=APPDEMOSECRETKEYSAMPLE';

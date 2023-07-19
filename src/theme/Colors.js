@@ -11,6 +11,7 @@ const Colors = {
   infoColor: '#87CEFA',
   blueGrey: '#7393B3',
   primaryText: '#515A6E',
+  border: '#DCDEE2',
 };
 
 export default Colors;
