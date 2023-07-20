@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {Loader} from '../components';
 import StorageService from '../utils/AsyncStorage';
@@ -7,10 +7,15 @@ import {routeNames} from '../utils/RouteNames';
 import HTTPService from '../networkConfig/HttpServices';
 import {showErrorToast} from '../utils/FlashMessage';
 import Strings from '../utils/Strings';
+import imageConstants from '../res';
+import SplashScreen from 'react-native-splash-screen';
 
 const Splash = () => {
   useEffect(() => {
-    handleNavigation();
+    setTimeout(() => {
+      SplashScreen.hide();
+      handleNavigation();
+    }, 2000);
   }, []);
 
   const handleNavigation = async () => {
@@ -32,9 +37,21 @@ const Splash = () => {
     }
   };
 
-  return <Loader />;
+  return (
+    <View style={styles.splashMainContainer}>
+      <Image style={styles.splashImage} source={imageConstants.launchImage} />
+    </View>
+  );
 };
 
 export default Splash;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  splashMainContainer: {
+    flex: 1,
+  },
+  splashImage: {
+    width: '100%',
+    height: '100%',
+  },
+});
