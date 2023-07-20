@@ -29,13 +29,13 @@ import {
   homeWorldReset,
 } from '../redux/slices/homeWorldSlice';
 import Strings from '../utils/Strings';
+import {requestCompleted, requestStarted} from '../redux/slices/appSlice';
 
 const Home = () => {
   const [starWarsCharList, setStarWarsCharList] = useState([]);
   const dispatch = useDispatch();
   const peopleListState = useSelector(state => state.peopleList);
   const appState = useSelector(state => state.app);
-  console.log('peopleListState-->', peopleListState);
 
   const [isZoomModelVisible, setIsZoomModelVisible] = useState(false);
   const [charData, setCharData] = useState(null);
@@ -98,13 +98,15 @@ const Home = () => {
 
   const onCharPress = (url, item) => {
     setCharData({...item, url});
+    dispatch(requestStarted());
     dispatch(charDetailReset());
     dispatch(homeWorldReset());
     dispatch(getCharDetails({url: item?.url}));
     dispatch(getHomeWorldDetails({url: item?.homeworld}));
     setTimeout(() => {
       setIsCharDetailModelVisible(true);
-    }, 500);
+      dispatch(requestCompleted());
+    }, 3000);
   };
 
   const renderFooter = () => {
@@ -149,6 +151,7 @@ const Home = () => {
   };
 
   const renderEmptyComponent = () => {
+    if (appState?.loading) return null;
     return (
       <View style={styles.emptyView}>
         <Text style={styles.emptyText}>{Strings.noRecordFound}</Text>

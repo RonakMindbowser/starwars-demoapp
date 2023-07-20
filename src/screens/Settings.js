@@ -1,11 +1,11 @@
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {ButtonComponent} from '../components';
 import Strings from '../utils/Strings';
 import StorageService from '../utils/AsyncStorage';
 import NavigationService from '../navigation/NavigationService';
 import {routeNames} from '../utils/RouteNames';
 import {showSuccessToast} from '../utils/FlashMessage';
+import Lottie from 'lottie-react-native';
 
 const Settings = () => {
   const onPressLogout = () => {
@@ -28,9 +28,14 @@ const Settings = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ButtonComponent title={Strings.logOut} onPress={onPressLogout} />
-    </View>
+    <TouchableOpacity style={styles.container} onPress={onPressLogout}>
+      <Lottie
+        source={require('../res/animations/animation_lkbdyryh.json')}
+        autoPlay
+        loop
+        style={styles.animationStyle}
+      />
+    </TouchableOpacity>
   );
 };
 
@@ -42,5 +47,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+  },
+  animationStyle: {
+    width: '40%',
+    height: '40%',
   },
 });

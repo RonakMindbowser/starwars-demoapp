@@ -3,7 +3,7 @@ import {navigationRef} from './NavigationService';
 import {createStackNavigator} from '@react-navigation/stack';
 import {routeNames} from '../utils/RouteNames';
 import BottomTab from './BottomTab';
-import {Login, Splash} from '../screens';
+import {Launch, Login, Splash} from '../screens';
 
 const options = {
   options: {
@@ -22,6 +22,11 @@ const AppNavigator = () => {
           {...options}
           name={routeNames.splash}
           component={Splash}
+        />
+        <Stack.Screen
+          {...options}
+          name={routeNames.launch}
+          component={Launch}
         />
         <Stack.Screen {...options} name={routeNames.login} component={Login} />
         <Stack.Screen

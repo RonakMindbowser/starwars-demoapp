@@ -4,4 +4,5 @@ export const routeNames = {
   splash: 'Splash',
   bottomTab: 'BottomTab',
   settings: 'Settings',
+  launch: 'Launch',
 };

@@ -1,5 +1,4 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {requestCompleted, requestStarted} from './appSlice';
 import HTTPService from '../../networkConfig/HttpServices';
 
 export const getCharDetails = createAsyncThunk(

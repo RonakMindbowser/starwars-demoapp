@@ -80,7 +80,6 @@ export default class HTTPService {
     }
 
     const {isSuccess} = await this.checkTokenValidation();
-    console.log('succes--->', isSuccess);
 
     if (isSuccess) {
       const headers = await this.getHeadersWithToken();
@@ -134,7 +133,6 @@ export default class HTTPService {
         await StorageService.getItem(StorageService.Keys.userData),
       );
       const response = await this.generateNewAccessToken(userData);
-      console.log('response-->', response);
       if (response?.isSuccess) {
         const token = {
           accessToken: response?.response,
@@ -221,7 +219,6 @@ export default class HTTPService {
     const token = JSON.parse(
       await StorageService.getItem(StorageService.Keys.accessToken),
     );
-    console.log('Stored Token-->', token);
     try {
       let response = await decode(
         token?.accessToken, // the token
@@ -230,7 +227,6 @@ export default class HTTPService {
           skipValidation: false, // to skip signature and exp verification
         },
       );
-      console.log('response-123 of decode-', response);
       if (response) {
         return {
           isSuccess: true,
@@ -241,7 +237,6 @@ export default class HTTPService {
         };
       }
     } catch (error) {
-      console.log('Error-->', error);
       return {
         isSuccess: false,
         error: error,

@@ -1,6 +1,5 @@
 import {
   Image,
-  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,7 +9,7 @@ import {
 import React from 'react';
 import Modal from 'react-native-modal';
 import Colors from '../theme/Colors';
-import {isIos, screenHeight, screenWidth} from '../utils/Metrics';
+import {screenHeight, screenWidth} from '../utils/Metrics';
 import {useSelector} from 'react-redux';
 import imageConstants from '../res';
 import Strings from '../utils/Strings';

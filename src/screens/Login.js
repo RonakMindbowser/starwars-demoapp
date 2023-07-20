@@ -4,7 +4,7 @@ import Colors from '../theme/Colors';
 import Strings from '../utils/Strings';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {isAndroid} from '../utils/Metrics';
-import {ButtonComponent, CustomTextInput} from '../components';
+import {ButtonComponent, CustomTextInput, Loader} from '../components';
 import {
   isEmptyOrNull,
   isValidEmail,
@@ -15,7 +15,7 @@ import {showErrorToast, showSuccessToast} from '../utils/FlashMessage';
 import StorageService from '../utils/AsyncStorage';
 import NavigationService from '../navigation/NavigationService';
 import {routeNames} from '../utils/RouteNames';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {requestCompleted, requestStarted} from '../redux/slices/appSlice';
 
 const Login = () => {
@@ -26,6 +26,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [isPasswordError, setIsPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+
+  const appState = useSelector(state => state.app);
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -40,12 +42,8 @@ const Login = () => {
         password,
       };
       dispatch(requestStarted());
-      console.log('====================================');
-      console.log('params-->', params);
-      console.log('====================================');
       HTTPService.generateNewAccessToken(params)
         .then(async response => {
-          console.log('response-->', response);
           dispatch(requestCompleted());
           if (response?.isSuccess) {
             const token = {
@@ -68,7 +66,6 @@ const Login = () => {
           }
         })
         .catch(error => {
-          console.log('Error-->', error);
           dispatch(requestCompleted());
           showErrorToast(Strings.somethingWentWrong);
         });
@@ -145,6 +142,7 @@ const Login = () => {
         </View>
         <ButtonComponent title={Strings.login} onPress={onPressLogin} />
       </KeyboardAwareScrollView>
+      {appState?.loading ? <Loader /> : null}
       <SafeAreaView />
     </View>
   );
