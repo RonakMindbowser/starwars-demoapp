@@ -1,12 +1,14 @@
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   Keyboard,
   RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -30,6 +32,9 @@ import {
 } from '../redux/slices/homeWorldSlice';
 import Strings from '../utils/Strings';
 import {requestCompleted, requestStarted} from '../redux/slices/appSlice';
+import imageConstants from '../res';
+import NavigationService from '../navigation/NavigationService';
+import {routeNames} from '../utils/RouteNames';
 
 const Home = () => {
   const [starWarsCharList, setStarWarsCharList] = useState([]);
@@ -55,14 +60,15 @@ const Home = () => {
       !isEmptyOrNull(peopleListState?.peopleList) &&
       peopleListState?.peopleList?.length
     ) {
+      let list = [];
       if (starWarsCharList.length) {
-        setStarWarsCharList([
-          ...starWarsCharList,
-          ...peopleListState?.peopleList,
-        ]);
+        list = [...starWarsCharList, ...peopleListState?.peopleList];
       } else {
-        setStarWarsCharList([...peopleListState?.peopleList]);
+        list = [...peopleListState?.peopleList];
       }
+      console.log('List--->', list);
+      setStarWarsCharList([...list]);
+
       setIsPaginationLoading(false);
       setRefreshing(false);
     }
@@ -125,6 +131,7 @@ const Home = () => {
         {...item}
         onLongPress={url => onCharLongPress(url, item)}
         onPress={url => onCharPress(url, item)}
+        index={index}
       />
     );
   };
@@ -159,18 +166,92 @@ const Home = () => {
     );
   };
 
+  const onPressFilter = () => {
+    let homeWorldFilterList = [];
+    let filmFilterList = [];
+    let speicesFilterList = [];
+    let starShipFilterList = [];
+    starWarsCharList.map(obj => {
+      if (!isEmptyOrNull(obj?.homeworld)) {
+        let isAlreadyExist = homeWorldFilterList.find(
+          item => item?.url == obj?.homeworld,
+        );
+        if (!isAlreadyExist) {
+          homeWorldFilterList.push({
+            url: obj?.homeworld,
+          });
+        }
+      }
+      if (!isEmptyOrNull(obj?.films) && [...obj?.films].length) {
+        obj?.films?.map(film => {
+          let isAlreadyExist = filmFilterList.find(item => item?.url == film);
+          if (!isAlreadyExist) {
+            filmFilterList.push({
+              url: film,
+            });
+          }
+        });
+      }
+      if (!isEmptyOrNull(obj?.species) && [...obj?.species].length) {
+        obj?.species?.map(specie => {
+          let isAlreadyExist = speicesFilterList.find(
+            item => item?.url == specie,
+          );
+          if (!isAlreadyExist) {
+            speicesFilterList.push({
+              url: specie,
+            });
+          }
+        });
+      }
+      if (!isEmptyOrNull(obj?.starships) && [...obj?.starships].length) {
+        obj?.starships?.map(ship => {
+          let isAlreadyExist = starShipFilterList.find(
+            item => item?.url == ship,
+          );
+          if (!isAlreadyExist) {
+            starShipFilterList.push({
+              url: ship,
+            });
+          }
+        });
+      }
+    });
+    console.log('homeWorldFilterList--->', homeWorldFilterList);
+    console.log('filmFilterList--->', filmFilterList);
+    console.log('speicesFilterList--->', speicesFilterList);
+    console.log('starShipFilterList--->', starShipFilterList);
+    NavigationService.navigate(routeNames.filter, {
+      homeWorldFilterList,
+      filmFilterList,
+      speicesFilterList,
+      starShipFilterList,
+      starWarsCharList,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <SafeAreaView />
-      <View style={styles.searchWrap}>
-        <TextInput
-          placeholder={Strings.search}
-          onSubmitEditing={() => Keyboard.dismiss()}
-          returnKeyType={'done'}
-          value={searchValue}
-          onChangeText={onSearchValueChange}
-          style={styles.searchInput}
-        />
+      <View style={styles.topWrap}>
+        <View style={styles.searchWrap}>
+          <TextInput
+            placeholder={Strings.search}
+            onSubmitEditing={() => Keyboard.dismiss()}
+            returnKeyType={'done'}
+            value={searchValue}
+            onChangeText={onSearchValueChange}
+            style={styles.searchInput}
+            placeholderTextColor={Colors.blueGrey}
+          />
+        </View>
+        <TouchableOpacity onPress={onPressFilter}>
+          <Image
+            source={imageConstants.filter}
+            style={styles.filerIcon}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
       </View>
       <FlatList
         data={starWarsCharList}
@@ -213,26 +294,32 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   contentContainerStyle: {
     paddingHorizontal: 20,
     flexGrow: 1,
+    backgroundColor: Colors.white,
   },
   footerWrap: {
     paddingVertical: 15,
   },
   searchWrap: {
-    paddingHorizontal: 15,
     borderWidth: 1,
-    marginHorizontal: 20,
-    paddingVertical: 10,
     borderRadius: 40,
     marginBottom: 10,
+    marginTop: 10,
+    height: 40,
+    paddingLeft: 10,
+    flex: 0.95,
   },
   searchInput: {
     fontSize: 14,
     fontWeight: '500',
     color: Colors.black,
+    flex: 1,
+    height: 40,
+    padding: 0,
   },
   emptyView: {
     flex: 1,
@@ -242,5 +329,15 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 12,
     color: Colors.blueGrey,
+  },
+  topWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  filerIcon: {
+    height: 30,
+    width: 30,
   },
 });

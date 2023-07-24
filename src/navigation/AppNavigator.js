@@ -3,7 +3,7 @@ import {navigationRef} from './NavigationService';
 import {createStackNavigator} from '@react-navigation/stack';
 import {routeNames} from '../utils/RouteNames';
 import BottomTab from './BottomTab';
-import {Launch, Login, Splash} from '../screens';
+import {Filter, Launch, Login, Result, Splash} from '../screens';
 
 const options = {
   options: {
@@ -33,6 +33,16 @@ const AppNavigator = () => {
           {...options}
           name={routeNames.bottomTab}
           component={BottomTab}
+        />
+        <Stack.Screen
+          {...options}
+          name={routeNames.filter}
+          component={Filter}
+        />
+        <Stack.Screen
+          {...options}
+          name={routeNames.result}
+          component={Result}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,5 +1,6 @@
 import ButtonComponent from './ButtonComponent';
 import CustomTextInput from './CustomTextInput';
+import Header from './Header';
 import Loader from './Loader';
 import StarWarsCardComponent from './StarWarsCardComponent';
 import StarWarsCharDetailsModelComponent from './StarWarsCharDetailsModelComponent';
@@ -12,4 +13,5 @@ export {
   StarWarsCharDetailsModelComponent,
   CustomTextInput,
   ButtonComponent,
+  Header,
 };

@@ -40,5 +40,14 @@ const Strings = {
   no: 'No',
   logoutSuccess: 'You have logged out successfully',
   tokenRefreshSuccessFully: 'Token refreshed successfully',
+  home: 'Home',
+  filter: 'Filter',
+
+  homeWold: 'Home Wolrd',
+  films: 'Films',
+  species: 'Species',
+  starShips: 'Star Ships',
+  apply: 'Apply',
+  result: 'Result',
 };
 export default Strings;

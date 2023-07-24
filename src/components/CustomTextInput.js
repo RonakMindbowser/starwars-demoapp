@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     fontSize: 14,
     marginRight: 20,
-    color: Colors.title,
+    color: Colors.black,
     flex: 1,
     padding: 0,
     paddingBottom: 3,

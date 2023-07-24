@@ -5,4 +5,6 @@ export const routeNames = {
   bottomTab: 'BottomTab',
   settings: 'Settings',
   launch: 'Launch',
+  filter: 'Filter',
+  result: 'Result',
 };

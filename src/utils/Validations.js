@@ -5,7 +5,7 @@ export const isEmptyOrNull = input => {
 };
 
 export const getFormattedDate = date => {
-  let updatedDate = moment(date).format('DD MMM, YYYY hh:mm A');
+  let updatedDate = moment(date).format('DD-MM-YYYY');
   return updatedDate;
 };
 
@@ -31,4 +31,28 @@ export const isValidPassword = password => {
     /^(?=.*[A-Z])(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
   return regularExpression.test(String(password));
+};
+
+// export const intToRGB = value => {
+//   //credit to https://stackoverflow.com/a/2262117/2737978 for the idea of how to implement
+//   var blue = Math.floor(value % 256);
+//   var green = Math.floor((value / 256) % 256);
+//   var red = Math.floor((value / 256 / 256) % 256);
+
+//   return 'rgb(' + red + ',' + green + ',' + blue + ')';
+// };
+
+// export function generateRandomColor(value) {
+//   var randomColor = '#' + Math.floor(value * 167776215).toString(16);
+//   return randomColor;
+// }
+
+export const getRandomColorCode = value => {
+  let color = '#';
+  let letters = '0123456789ABCDEF';
+  color += value * 16;
+  for (let i = 0; i < 4; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 };

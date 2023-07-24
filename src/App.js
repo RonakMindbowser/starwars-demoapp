@@ -6,6 +6,8 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {toastConfig} from './utils/FlashMessage';
 import AppContainer from './navigation/AppContainer';
 LogBox.ignoreAllLogs();
+
+//TODO : Need to compileSdkVersion==33 in react-native-pure-jwt build.gradle
 const App = () => {
   return (
     <View style={styles.container}>

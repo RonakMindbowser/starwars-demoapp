@@ -192,8 +192,8 @@ export default class HTTPService {
       const response = await sign(
         {
           iss: params?.email,
-          exp: new Date().getTime() + 30 * 1000,
-          additional: 'params',
+          exp: new Date().getTime() + 300 * 1000,
+          additional: params,
         },
         appSecretForAuthentication,
         {
