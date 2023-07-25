@@ -66,7 +66,6 @@ const Home = () => {
       } else {
         list = [...peopleListState?.peopleList];
       }
-      console.log('List--->', list);
       setStarWarsCharList([...list]);
 
       setIsPaginationLoading(false);
@@ -217,10 +216,6 @@ const Home = () => {
         });
       }
     });
-    console.log('homeWorldFilterList--->', homeWorldFilterList);
-    console.log('filmFilterList--->', filmFilterList);
-    console.log('speicesFilterList--->', speicesFilterList);
-    console.log('starShipFilterList--->', starShipFilterList);
     NavigationService.navigate(routeNames.filter, {
       homeWorldFilterList,
       filmFilterList,

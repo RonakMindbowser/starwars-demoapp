@@ -1,7 +1,6 @@
 import {Image, Platform, StyleSheet} from 'react-native';
 import {Home, Settings} from '../screens';
 import imageConstants from '../res';
-import Strings from '../utils/Strings';
 import {isAndroid} from '../utils/Metrics';
 import Colors from '../theme/Colors';
 

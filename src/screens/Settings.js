@@ -6,6 +6,7 @@ import NavigationService from '../navigation/NavigationService';
 import {routeNames} from '../utils/RouteNames';
 import {showSuccessToast} from '../utils/FlashMessage';
 import Lottie from 'lottie-react-native';
+import animations from '../res/animations';
 
 const Settings = () => {
   const onPressLogout = () => {
@@ -30,7 +31,7 @@ const Settings = () => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPressLogout}>
       <Lottie
-        source={require('../res/animations/animation_lkbdyryh.json')}
+        source={animations.logOutAnimation}
         autoPlay
         loop
         style={styles.animationStyle}

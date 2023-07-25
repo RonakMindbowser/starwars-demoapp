@@ -8,6 +8,7 @@ import {showErrorToast} from '../utils/FlashMessage';
 import Strings from '../utils/Strings';
 import Lottie from 'lottie-react-native';
 import Colors from '../theme/Colors';
+import animations from '../res/animations';
 
 const Launch = () => {
   useEffect(() => {
@@ -37,7 +38,7 @@ const Launch = () => {
   return (
     <View style={styles.container}>
       <Lottie
-        source={require('../res/animations/animation_lkbde9wl.json')}
+        source={animations.launchScreenAnimation}
         autoPlay
         loop
         style={styles.animationStyle}

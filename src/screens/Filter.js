@@ -44,7 +44,6 @@ const Filter = () => {
   const getHomeWorldListApi = async () => {
     if ([...homeWorldFilterList].length) {
       let homeWolrdData = await getListFromApi(homeWorldFilterList);
-      console.log('Items-homeWolrdData->', homeWolrdData);
       if (homeWolrdData?.success) {
         setHomeWorldLocalList([...homeWolrdData.response]);
       }
@@ -54,7 +53,6 @@ const Filter = () => {
   const getFilmListApi = async () => {
     if ([...filmFilterList].length) {
       let filmData = await getListFromApi(filmFilterList, 'title');
-      console.log('Items-filmData->', filmData);
       if (filmData?.success) {
         setFilmLocalList([...filmData.response]);
       }
@@ -64,7 +62,6 @@ const Filter = () => {
   const getSpeciesListApi = async () => {
     if ([...speicesFilterList].length) {
       let speicesData = await getListFromApi(speicesFilterList);
-      console.log('Items-speicesData->', speicesData);
       if (speicesData?.success) {
         setSpeciesLocalList([...speicesData.response]);
       }
@@ -74,7 +71,6 @@ const Filter = () => {
   const getStarShipListApi = async () => {
     if ([...starShipFilterList].length) {
       let starShipData = await getListFromApi(starShipFilterList);
-      console.log('Items-starShipData->', starShipData);
       if (starShipData?.success) {
         setStarShipLocalList([...starShipData.response]);
       }
@@ -224,12 +220,10 @@ const Filter = () => {
     let selectedSpecies = speciesLocalList.filter(obj => obj?.selected);
     let selectedStarship = starShipLocalList.filter(obj => obj?.selected);
 
-    console.log('selectedHomeWorld-->', selectedHomeWorld);
-    console.log('selectedFilms-->', selectedFilms);
-    console.log('selectedSpecies-->', selectedSpecies);
-    console.log('selectedStarship-->', selectedStarship);
-    console.log('list-->', list);
     let filteredList = [];
+    let filteredList2 = [];
+    let filteredList3 = [];
+    let filteredList4 = [];
     if (
       selectedHomeWorld.length ||
       selectedFilms.length ||
@@ -237,14 +231,62 @@ const Filter = () => {
       selectedStarship.length
     ) {
       if (selectedHomeWorld.length) {
-        starWarsCharList;
+        list?.map(obj => {
+          let isAvailable = selectedHomeWorld?.find(
+            item => item?.url == obj?.homeworld,
+          );
+          if (isAvailable) {
+            filteredList.push(obj);
+          }
+        });
+      } else {
+        filteredList = [...list];
+      }
+
+      if (selectedFilms.length) {
+        filteredList?.map(obj => {
+          let isAvailable = selectedFilms?.find(item =>
+            [...obj?.films]?.includes(item?.url),
+          );
+          if (isAvailable) {
+            filteredList2.push(obj);
+          }
+        });
+      } else {
+        filteredList2 = [...filteredList];
+      }
+
+      if (selectedSpecies.length) {
+        filteredList2?.map(obj => {
+          let isAvailable = selectedSpecies?.find(item =>
+            [...obj?.species]?.includes(item?.url),
+          );
+          if (isAvailable) {
+            filteredList3.push(obj);
+          }
+        });
+      } else {
+        filteredList3 = [...filteredList2];
+      }
+
+      if (selectedStarship.length) {
+        filteredList3?.map(obj => {
+          let isAvailable = selectedStarship?.find(item =>
+            [...obj?.starships]?.includes(item?.url),
+          );
+          if (isAvailable) {
+            filteredList4.push(obj);
+          }
+        });
+      } else {
+        filteredList4 = [...filteredList3];
       }
     } else {
-      filteredList = list;
+      filteredList4 = [...list];
     }
-
-    return;
-    NavigationService.navigate(routeNames.result);
+    NavigationService.navigate(routeNames.result, {
+      result: filteredList4,
+    });
   };
 
   return (

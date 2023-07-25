@@ -1,12 +1,13 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Lottie from 'lottie-react-native';
+import animations from '../res/animations';
 
 const Loader = props => {
   return (
     <View style={styles.loaderContainer}>
       <Lottie
-        source={require('../res/animations/animation_lkbcz3qs.json')}
+        source={animations.loaderAnimation}
         autoPlay
         loop
         style={styles.animationStyle}
