@@ -36,6 +36,7 @@ const Login = () => {
   const onPressLogin = async () => {
     const isValid = validateCredentials();
     if (isValid) {
+      Keyboard.dismiss();
       await StorageService.clear();
       const params = {
         email,

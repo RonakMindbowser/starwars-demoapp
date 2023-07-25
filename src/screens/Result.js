@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flexGrow: 1,
     backgroundColor: Colors.white,
+    paddingBottom: 20,
   },
   emptyView: {
     flex: 1,
