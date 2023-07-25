@@ -187,12 +187,17 @@ export default class HTTPService {
     return false;
   };
 
+  /**
+   * @param {*} params
+   * @returns JWT Token for 5 min validation
+   * 60 * 1 == 60 sec
+   */
   static generateNewAccessToken = async params => {
     try {
       const response = await sign(
         {
           iss: params?.email,
-          exp: new Date().getTime() + 300 * 1000,
+          exp: new Date().getTime() + 60 * 1000,
           additional: params,
         },
         appSecretForAuthentication,
