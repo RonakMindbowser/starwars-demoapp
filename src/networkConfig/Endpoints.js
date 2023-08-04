@@ -13,3 +13,11 @@ export const StatusCode = {
 };
 
 export const appSecretForAuthentication = 'XYZSTARWARS=APPDEMOSECRETKEYSAMPLE';
+
+export const Auth0Config = {
+  domain: 'dev-n54d3ahx6mnoi0ha.us.auth0.com',
+  clientId: 'qsavhaP8qpW5ViscdngkOztSY2lI0xMN',
+  audience: 'https://dev-n54d3ahx6mnoi0ha.us.auth0.com/api/v2/',
+  scope:
+    'openid profile email offline_access read:users read:current_user read:user_idp_tokens',
+};
